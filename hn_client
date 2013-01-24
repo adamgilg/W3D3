@@ -1,0 +1,2 @@
+include 'restclient'
+include 'nokogiri'
