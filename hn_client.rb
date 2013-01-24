@@ -3,12 +3,12 @@ require  'nokogiri'
 require 'launchy'
 require 'sqlite3'
 
-
+# MZ: Snake case in class name
 class HN_DB < SQLite3::Database
   include Singleton
 
   def initialize
-    super("hn.db")
+    super("hn.db") # MZ:  .sqlite3 might be a more accurate representation of the file's contents
 
     self.results_as_hash = true
     self.type_translation = true
@@ -46,6 +46,7 @@ end
 
 # end
 
+# MZ: Nice models here!
 class Story
   #add story_id
   attr_accessor :story_name, :url, :points, :user_name
@@ -56,6 +57,14 @@ class Story
   end
 
   def self.top_stories
+
+    # <longest_comment_ever>
+    # MZ: I don't know if this is right or not, but when
+    # Erik and I planned for this we pictured a bunch of lib classes
+    # that were going to contain all of the scraper code.
+    # The plan was to then create models like this Story class that checks the db for a story
+    # then if it's not there, communicate with a scraper to get the content... then save it... then return it to the user.
+    # </longest_comment_ever>
     hn_homepage = Nokogiri::HTML(File.open("./hn-local-copy/index.html"))
 
     story_names = hn_homepage.css("td.title > a")
